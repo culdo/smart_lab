@@ -110,6 +110,7 @@ def test_job(arg="default"):
 
 
 if __name__ == '__main__':
+    pass
     # browser = login("cbc106008", "2848444B")
     # nav_to_punchform()
     # check_in()
