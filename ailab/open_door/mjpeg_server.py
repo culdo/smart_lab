@@ -6,7 +6,7 @@
 import urllib.request
 import numpy as np
 import cv2
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageColor
 from sys import stdout
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -70,6 +70,7 @@ class ThreadingHTTPServer( ThreadingMixIn, HTTPServer ):
 
 
 def facerec(ns, tolerance=0.45, size_threshold=40000):
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     import face_recognition
 
     known_face_names = ["胡鈞", "莊凱鈞"]

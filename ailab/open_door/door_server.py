@@ -12,6 +12,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
 
             self.server.is_open.value = 1
+            while self.server.is_open.value != 0:
+                sleep(0.001)
 
             self.wfile.write(b'Hello, world!')
 
