@@ -11,8 +11,9 @@ from random import randint
 from datetime import datetime, timedelta, time
 
 
-def nav_to_checkform(*args):
-    login(*args)
+def nav_to_checkform():
+    browser.switch_to_frame(wait.until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, "frame[name='MENU']"))))
     labor_section = wait.until(
         EC.presence_of_element_located((By.ID, "spnode_[B40]_兼任助理差勤作業")))
     labor_section.click()
@@ -110,8 +111,8 @@ def test_job(arg="default"):
 
 
 if __name__ == '__main__':
-    pass
-    # browser = login("cbc106008", "2848444B")
-    # nav_to_punchform()
+    # pass
+    login("cbc106008", "2848444B")
+    nav_to_checkform()
     # check_in()
 

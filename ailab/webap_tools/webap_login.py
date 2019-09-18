@@ -11,6 +11,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from ailab.webap_tools.captcha_prediction import get_ans
+import time
 
 webap_url = "https://webap.nptu.edu.tw/web/Secure/default.aspx"
 browser = Chrome()
@@ -60,7 +61,19 @@ def logout():
     print("Logout")
 
 
+def test():
+    while True:
+        captcha_ans = get_ans(get_captcha())
+        element = wait.until(
+            EC.presence_of_element_located((By.ID, "LoginStd_txtCheckCode")))
+        element.clear()
+        element.send_keys(captcha_ans)
+        time.sleep(1)
+
+
 if __name__ == '__main__':
+    test()
     # get_captcha()
     # plt.show()
-    login("cbc106008", "2848444B")
+    # login("cbc106008", "2848444B")
+
