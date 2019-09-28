@@ -1,12 +1,16 @@
 from keras.models import load_model
+from keras import backend
 import numpy as np
 from time import sleep
 import cv2
 import matplotlib.pyplot as plt
+import tensorflow as tf
 
 letters = "0123456789"
 
 model = load_model('nptu_captch.h5')
+
+graph = tf.get_default_graph()
 
 
 def rgb2gray(rgb):
@@ -16,10 +20,18 @@ def rgb2gray(rgb):
 
 
 def get_ans(captcha_img):
+
+    global graph
+
     prediction_data = np.stack(np.array(captcha_img) / 255.0)  # predict img local
     prediction_data = rgb2gray(prediction_data)  # 灰階
     prediction_data = prediction_data.reshape(-1, 35, 95, 1)
-    prediction = model.predict(prediction_data)
+    with graph.as_default():
+        try:
+            prediction = model.predict(prediction_data)
+        except:
+            backend.clear_session()
+    # prediction = model.predict(prediction_data)
     # print(captcha_ans)
 
     captcha_ans = ""
