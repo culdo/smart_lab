@@ -84,7 +84,7 @@ def facerec(ns, tolerance=0.45, size_threshold=40000):
     # Create arrays of known face encodings and their names
     known_face_encodings = test_face_encodings
 
-    stream = urllib.request.urlopen('http://203.64.134.168:9091/')
+    stream = urllib.request.urlopen(img_url)
     mybytes = bytes()
 
     while True:
@@ -153,6 +153,7 @@ if __name__ == "__main__":
     cameraQuality = 90
     maxfps = 0
     port = 8091
+    img_url = "http://203.64.134.168:9091/"
 
     server = ThreadingHTTPServer( ("0.0.0.0",port), RequestHandler )
     manager = Manager()

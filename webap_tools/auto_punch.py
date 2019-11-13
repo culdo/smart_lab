@@ -1,6 +1,8 @@
 import calendar
 import threading
 
+import keras
+
 from ailab.webap_tools.webap_login import WebAp
 from time import ctime, sleep
 
@@ -9,21 +11,21 @@ from selenium.webdriver.support import expected_conditions as EC
 import schedule
 from random import randint
 from datetime import datetime, timedelta, time
+import sys
 
 
 class AutoPunching(WebAp):
 
     def nav_to_checkform(self):
-        self.login(*self.account)
+        user_menu = self.login(*self.account)
         self.browser.switch_to_default_content()
-        self.browser.switch_to_frame(self.wait.until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, "frame[name='MENU']"))))
+        self.browser.switch_to_frame(user_menu)
         labor_section = self.wait.until(
             EC.presence_of_element_located((By.ID, "spnode_[B40]_兼任助理差勤作業")))
         labor_section.click()
         self.browser.switch_to_default_content()
         self.browser.switch_to_frame(self.wait.until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, "frame[name='MAIN']"))))
+            EC.presence_of_element_located((By.CSS_SELECTOR, "frame[name='MAIN']"))))
         labor_section = self.wait.until(
             EC.presence_of_element_located(
                 (By.CSS_SELECTOR, "#SubMenu_dgData > tbody > tr.TRAlternatingItemStyle > td:nth-child(1) > a")))
@@ -95,15 +97,19 @@ class AutoPunching(WebAp):
             EC.presence_of_element_located((By.ID, "B4001A_txtBREAK_ETM")))
         break_time_end.send_keys(end_time)
 
-    def calendar_plan_job(self, year, month, start_day, end_day, duty_datetime, holiday_list=(), login_delay=2):
+    def calendar_plan_month_job(self, year, month, start_day, end_day, duty_datetime, holiday_list=(),
+                                login_delay=2):
         c = calendar.Calendar(firstweekday=6)
         login_delta = timedelta(minutes=login_delay)
         today = datetime.today().day
         if today > start_day:
             start_day = today
         print("排程開始日為%s月%s號" % (month, start_day))
+        print("國定假日為%s" % holiday_list)
         for date in c.itermonthdates(year, month):
             weekday = date.strftime("%A").lower()
+            if date.day == 21:
+                print(weekday)
             if date.month == month and date.day not in holiday_list \
                     and date.day in range(start_day, end_day + 1) \
                     and weekday in duty_datetime.keys():
@@ -114,14 +120,15 @@ class AutoPunching(WebAp):
                 check_in_time = datetime.combine(date, check_in_time)
                 check_in_time = check_in_time - timedelta(minutes=randint(0, 5))
 
-                print(date.ctime(), date.weekday)
+                print(date.ctime(), date.weekday())
 
                 # Login to webap system and navigate to checking page
                 login_time = check_in_time - login_delta
                 if (login_time - datetime.now()).days >= 0:
                     print("login_time=%s " % login_time.ctime())
                     print("check_in_time=%s " % check_in_time.ctime())
-                    print("(login_time - datetime.now()).seconds = %s" % (login_time - datetime.now()).seconds)
+                    print("second to wait: %s" % (
+                            login_time - datetime.now()).total_seconds())
                     threading.Timer((login_time - datetime.now()).total_seconds(), self.nav_to_checkform).start()
 
                     # Check in
@@ -161,26 +168,9 @@ class AutoPunching(WebAp):
 
 
 if __name__ == '__main__':
-
     test_ap = AutoPunching("cbc106008", "2848444B")
-    # pass
-    # threading.Timer(0, test_ap.nav_to_checkform).start()
-    # threading.Timer(((datetime.now()+timedelta(total_seconds()=10))-datetime.now()).total_seconds(), test_ap.fill_break_time).start()
-    # threading.Timer(15, test_ap.logout).start()
-    test_ap.calendar_plan_job(2019, 9, 2, 30, {"monday": ["13:00", "17:00"],
-                                               "wednesday": ["13:00", "17:00"],
-                                               # "thursday": ["18:35", "18:36"],
-                                               "friday": ["13:00", "17:00"]})
-    # while True:
-    #     print(ctime())
-    #     sleep(1)
-    # while True:
-    #     test_ap.nav_to_checkform()
-    #     sleep(3)
-    #     test_ap.fill_break_time()
-    #     sleep(1)
-    #     test_ap.logout()
-    #     sleep(5)
-    # sleep(3)
-    # test_ap.logout()
-
+    int_args = list(map(int, sys.argv[1:]))
+    test_ap.calendar_plan_month_job(int_args[0], int_args[1], int_args[2], int_args[3],
+                                    {"monday": ["13:00", "17:00"],
+                                     "wednesday": ["13:00", "17:00"],
+                                     "friday": ["13:00", "17:00"]}, int_args[4:])

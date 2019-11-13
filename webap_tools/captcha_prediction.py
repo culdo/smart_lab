@@ -1,14 +1,20 @@
-from keras.models import load_model
-from keras import backend
 import numpy as np
 from time import sleep
 import cv2
 import matplotlib.pyplot as plt
+from keras.models import load_model
 import tensorflow as tf
+import os
+from keras.backend.tensorflow_backend import set_session, clear_session
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True  # dynamically grow the memory used on the GPU
+# config.log_device_placement = True  # to log device placement (on which device the operation ran)
+sess = tf.Session(config=config)
+set_session(sess)  # set this TensorFlow session as the default session for Keras
 
 letters = "0123456789"
 
-model = load_model('nptu_captch.h5')
+model = load_model(os.environ["HOME"]+'/nptu/lab/smart_lab/ailab/webap_tools/nptu_captch.h5')
 
 graph = tf.get_default_graph()
 
@@ -30,7 +36,7 @@ def get_ans(captcha_img):
         try:
             prediction = model.predict(prediction_data)
         except:
-            backend.clear_session()
+            clear_session()
     # prediction = model.predict(prediction_data)
     # print(captcha_ans)
 

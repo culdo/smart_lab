@@ -52,13 +52,14 @@ class WebAp:
                 element = self.wait.until(
                     EC.presence_of_element_located((By.ID, "LoginStd_ibtLogin")))
                 element.click()
-
+                user_menu = self.wait.until(
+                    EC.presence_of_element_located((By.CSS_SELECTOR, "frame[name='MENU']")))
+                return user_menu
             except UnexpectedAlertPresentException:
                 print(UnexpectedAlertPresentException)
                 self.browser.refresh()
                 time.sleep(5)
                 continue
-            break
 
     def logout(self):
         self.browser.switch_to_default_content()
