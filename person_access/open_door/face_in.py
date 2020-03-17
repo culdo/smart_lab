@@ -10,7 +10,8 @@ from threading import Thread
 from PIL import Image, ImageDraw, ImageFont
 from sys import stdout
 
-open_cmd = "ssh pi@192.168.0.117".split()
+cam_ip = "192.168.0.52"
+open_cmd = ("ssh pi@%s" % cam_ip).split()
 open_cmd.append('python ~/lab/open_door/open.py')
 ready_open = True
 
@@ -35,7 +36,7 @@ def face_recognize(tolerance=0.45, size_threshold=40000):
     # Create arrays of known face encodings and their names
     known_face_encodings = test_face_encodings
 
-    stream = urllib.urlopen('http://192.168.0.117:8081/')
+    stream = urllib.urlopen('http://%s:8081/' % cam_ip)
     bytes = ''
     while True:
         bytes += stream.read(1024)
