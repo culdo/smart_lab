@@ -11,7 +11,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import UnexpectedAlertPresentException
 
-from ailab.webap_tools.captcha_prediction import get_ans
+from .captcha_prediction import get_ans
 import time
 
 

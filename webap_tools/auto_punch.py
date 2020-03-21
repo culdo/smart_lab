@@ -3,7 +3,7 @@ import threading
 
 import keras
 
-from ailab.webap_tools.webap_login import WebAp
+from .webap_login import WebAp
 from time import ctime, sleep
 
 from selenium.webdriver.common.by import By
