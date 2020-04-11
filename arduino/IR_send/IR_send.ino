@@ -1,3 +1,8 @@
+/* 
+[credit]
+http://wyj-learning.blogspot.com/2017/12/arduino-06.html
+ */
+
 #include "IRremote.h"
 
 IRsend irsend;// pin 7 for Arduino Due, pin 9 for Arduino Mega, pin 3 for Arduino UNO

@@ -1,3 +1,8 @@
+/* 
+[credit]
+http://wyj-learning.blogspot.com/2017/12/arduino-06.html
+ */
+
 const int IR_rec_pin = 11;             // IR 接收器輸出腳位
 int IRstate = LOW;                    // IR 接收器輸出腳位狀態
 int IRstate_last = LOW;               // IR 接收器輸出腳位狀態(上一次)
