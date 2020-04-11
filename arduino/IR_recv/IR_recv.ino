@@ -36,7 +36,7 @@ void IR_rec_Check(){
         isIdle = false; //進入接收中狀態
           if(IRstate == HIGH) Serial.print(dT);
           else  Serial.print( 0-dT );
-        Serial.print(" ");
+        Serial.print(", ");
       }
  // 記錄此次時間
   time_last = timeNow;
