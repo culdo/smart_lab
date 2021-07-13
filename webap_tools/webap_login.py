@@ -92,7 +92,4 @@ class WebAp:
 if __name__ == '__main__':
     test_ap = WebAp()
     test_ap.test()
-    # get_captcha()
-    # plt.show()
-    # menu_frame, main_frame = login("cbc106008", "2848444B")
 
